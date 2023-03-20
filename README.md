@@ -1,5 +1,6 @@
 # Comp-Org-CPU
 Intro to computer architecture - CPU design
+
 DataPath - ControlPath - Pipeline
 
 Made using AMD Xilinx ISE™ FPGA Design suite
