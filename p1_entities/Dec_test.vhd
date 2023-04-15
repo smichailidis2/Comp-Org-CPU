@@ -27,9 +27,8 @@
 --------------------------------------------------------------------------------
 LIBRARY IEEE;
 USE IEEE.std_logic_1164.ALL;
-use IEEE.numeric_std.all; use IEEE.std_logic_unsigned.all;
-use IEEE.std_logic_arith.ALL
- 
+USE IEEE.numeric_std.ALL; USE IEEE.std_logic_unsigned.ALL;
+
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
 --USE ieee.numeric_std.ALL;
@@ -43,7 +42,7 @@ ARCHITECTURE behavior OF Dec_test IS
  
     COMPONENT Decoder
     PORT(
-         Dec_IN : IN  std_logic_vector(4 downto 0);
+         Dec_IN  : IN  std_logic_vector(4 downto 0);
          Dec_OUT : OUT  std_logic_vector(31 downto 0)
         );
     END COMPONENT;
