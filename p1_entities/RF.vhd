@@ -137,16 +137,15 @@ signal s_mux2_out : array_MUX2_out;
 --Each registers' Write Enable pin
 signal s_R_WE : std_logic_vector(31 downto 0);
 
---Outputs of the 2 Comparators
-type array_Comparator_out is array (0 to 1) of std_logic;
-signal s_Comparator_out : array_Comparator_out;
+--Output bus of the 2 Comparators
+signal s_Comparator_out : std_logic_vector(1 downto 0);
 
---Input array
+--Input signals array
 type array_of_ReadInputs is array (0 to 1) of std_logic_vector(4 downto 0);
 signal s_input_rArray : array_of_ReadInputs;
 
---TODO SIGNAL PLACEHOLDER
-signal todo : std_logic;
+--MUX2 SELECT SIGNAL BUS
+signal mux2select_bus : std_logic_vector(1 downto 0);
 
 
 
@@ -191,6 +190,20 @@ R: Register_comp port map (clk => clk,
 									rst => rst);
 
 end generate Register_gen;
+
+--COMPARATOR PORT MAPS
+
+Comparator_gen: for h in 0 to 1 generate
+
+Compar : Comparator port map(sel1 => Awr,
+									  sel2 => s_input_rArray(h),
+									  comp_out => s_Comparator_out(h));
+
+end generate Comparator_gen;
+
+
+
+
 
 --MUX port maps
 
@@ -241,10 +254,9 @@ MUX2_gen: for j in 0 to 1 generate
 
 Mult2: MUX2 port map (In0 => s_input_rArray(j),
 							 In1 => Awr,
-							 SEL => todo);
+							 SEL => s_Comparator_out(j) and WrEn);
 
 end generate MUX2_gen;
-
 
 
 end Behavioral;
