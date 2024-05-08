@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date:    18:00:11 04/10/2023 
+-- Create Date:    15:07:55 05/04/2024 
 -- Design Name: 
--- Module Name:    MUX2 - Behavioral 
+-- Module Name:    Incrementor - Behavioral 
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
@@ -29,27 +29,18 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity MUX2 is
+entity Incrementor is
     Port ( In0 : in  STD_LOGIC_VECTOR (31 downto 0);
-           In1 : in  STD_LOGIC_VECTOR (31 downto 0);
-           Mux_out : out  STD_LOGIC_VECTOR (31 downto 0);
-           SEL : in  STD_LOGIC);
-end MUX2;
+           Out0 : out  STD_LOGIC_VECTOR (31 downto 0));
+end Incrementor;
 
-architecture Behavioral of MUX2 is
+architecture Behavioral of Incrementor is
 
 begin
 
-process(SEL,In0,In1)
+process(In0)
 begin
-	case SEL is
-		when '0' =>
-			Mux_out <= In0;
-		when '1' =>
-			Mux_out <= In1;
-		when others =>
-			Mux_out <= "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-	end case;
+Out0 <= In0 + "00000000000000000000000000000010";
 end process;
 
 end Behavioral;

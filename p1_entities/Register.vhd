@@ -56,8 +56,6 @@ wait until clk'EVENT AND clk='1';
 		when '0' =>
 			if WE='1' then
 				tmp <= DataIN;
-			else
-				tmp <= "00000000000000000000000000000000";
 			end if;
 		when others =>
 			tmp <= "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";

@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date:    18:00:11 04/10/2023 
+-- Create Date:    15:15:12 05/04/2024 
 -- Design Name: 
--- Module Name:    MUX2 - Behavioral 
+-- Module Name:    FAdder - Behavioral 
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
@@ -19,6 +19,7 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use ieee.std_logic_unsigned.all;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -29,27 +30,21 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity MUX2 is
-    Port ( In0 : in  STD_LOGIC_VECTOR (31 downto 0);
-           In1 : in  STD_LOGIC_VECTOR (31 downto 0);
-           Mux_out : out  STD_LOGIC_VECTOR (31 downto 0);
-           SEL : in  STD_LOGIC);
-end MUX2;
+entity FAdder is
+    Port ( A : in  STD_LOGIC_VECTOR (31 downto 0);
+           B : in  STD_LOGIC_VECTOR (31 downto 0);
+           Result : out  STD_LOGIC_VECTOR (31 downto 0);
+           Cout : out  STD_LOGIC;
+           Cin : in  STD_LOGIC);
+end FAdder;
 
-architecture Behavioral of MUX2 is
+architecture Behavioral of FAdder is
 
 begin
 
-process(SEL,In0,In1)
+Process(A,B)
 begin
-	case SEL is
-		when '0' =>
-			Mux_out <= In0;
-		when '1' =>
-			Mux_out <= In1;
-		when others =>
-			Mux_out <= "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-	end case;
+Result <= A + B;
 end process;
 
 end Behavioral;

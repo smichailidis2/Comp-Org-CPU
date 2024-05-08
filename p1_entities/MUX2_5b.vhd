@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date:    18:00:11 04/10/2023 
+-- Create Date:    12:52:46 04/29/2024 
 -- Design Name: 
--- Module Name:    MUX2 - Behavioral 
+-- Module Name:    MUX2_5b - Behavioral 
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
@@ -29,28 +29,23 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity MUX2 is
-    Port ( In0 : in  STD_LOGIC_VECTOR (31 downto 0);
-           In1 : in  STD_LOGIC_VECTOR (31 downto 0);
-           Mux_out : out  STD_LOGIC_VECTOR (31 downto 0);
-           SEL : in  STD_LOGIC);
-end MUX2;
+entity MUX2_5b is
+    Port ( In0 : in  STD_LOGIC_VECTOR (4 downto 0);
+           In1 : in  STD_LOGIC_VECTOR (4 downto 0);
+           sel : in  STD_LOGIC;
+           Mux_out : out  STD_LOGIC_VECTOR (4 downto 0));
+end MUX2_5b;
 
-architecture Behavioral of MUX2 is
+architecture Behavioral of MUX2_5b is
 
 begin
 
-process(SEL,In0,In1)
-begin
-	case SEL is
-		when '0' =>
-			Mux_out <= In0;
-		when '1' =>
-			Mux_out <= In1;
-		when others =>
-			Mux_out <= "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-	end case;
-end process;
+with sel select
+	Mux_out <= In0 when '0',
+				  In1 when '1',
+				  (others => 'X') when others;
+
+
 
 end Behavioral;
 

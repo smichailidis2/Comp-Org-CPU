@@ -103,7 +103,8 @@ with SEL select
 				R28 when "11100",
 				R29 when "11101",
 				R30 when "11110",
-				R31 when "11111";
+				R31 when "11111",
+				"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" when others;
 
 end Behavioral;
 

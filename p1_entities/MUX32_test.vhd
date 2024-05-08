@@ -221,7 +221,6 @@ BEGIN
 		
 		wait for 100 ns;
 
-      -- insert stimulus here 
 
       wait;
    end process;

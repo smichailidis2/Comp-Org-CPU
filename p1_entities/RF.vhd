@@ -19,6 +19,7 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use ieee.numeric_std.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -131,8 +132,9 @@ type array_MUX32_out is array (0 to 1) of std_logic_vector(31 downto 0);
 signal s_mux32_out : array_MUX32_out;
 
 --And 2 outputs from 2-bit multiplexers
-type array_MUX2_out is array (0 to 1) of std_logic;
+type array_MUX2_out is array (0 to 1) of std_logic_vector (31 downto 0);
 signal s_mux2_out : array_MUX2_out;
+
 
 --Each registers' Write Enable pin
 signal s_R_WE : std_logic_vector(31 downto 0);
@@ -140,48 +142,92 @@ signal s_R_WE : std_logic_vector(31 downto 0);
 --Output bus of the 2 Comparators
 signal s_Comparator_out : std_logic_vector(1 downto 0);
 
---Input signals array
+------
+-- to avoid function call in MUX2 port map:
+type array_select_mux2 is array (0 to 1) of std_logic;
+signal s_mux2_select : array_select_mux2;
+------
+
+--Input signals array (ard1 , ard2)
 type array_of_ReadInputs is array (0 to 1) of std_logic_vector(4 downto 0);
 signal s_input_rArray : array_of_ReadInputs;
 
 --MUX2 SELECT SIGNAL BUS
 signal mux2select_bus : std_logic_vector(1 downto 0);
 
-
-
+-- zero constant for R0
+signal zero_constant : std_logic_vector(31 downto 0) := (others => '0');
 
 
 
 
 begin
 
+s_R_out(0) <= zero_constant;
+
 s_input_rArray(0) <= Ard1;
 s_input_rArray(1) <= Ard2;
+
+-- mux2 select signals
+s_mux2_select(0) <= s_comparator_out(0) and WrEn;
+s_mux2_select(1) <= s_comparator_out(1) and WrEn;
 
 --Decoder port map
 Dec:	Decoder port map(Dec_IN  => Awr, Dec_OUT => s_Decoder_out);
 
 
---Write enable for all registers
-process
-begin		  
-for i in 0 to 31 loop
-s_R_WE(i) <= WrEn and s_Decoder_out(i);
-end loop;
-end process;
+--	Write enable for all registers
+--process
+--begin		  
+--for i in 0 to 31 loop
+--s_R_WE(i) <= WrEn and s_Decoder_out(i);
+--end loop;
+--end process;
+s_R_WE(0)  <= WrEn and s_Decoder_out(0);
+s_R_WE(1)  <= WrEn and s_Decoder_out(1);
+s_R_WE(2)  <= WrEn and s_Decoder_out(2);
+s_R_WE(3)  <= WrEn and s_Decoder_out(3);
+s_R_WE(4)  <= WrEn and s_Decoder_out(4);
+s_R_WE(5)  <= WrEn and s_Decoder_out(5);
+s_R_WE(6)  <= WrEn and s_Decoder_out(6);
+s_R_WE(7)  <= WrEn and s_Decoder_out(7);
+s_R_WE(8)  <= WrEn and s_Decoder_out(8);
+s_R_WE(9)  <= WrEn and s_Decoder_out(9);
+s_R_WE(10) <= WrEn and s_Decoder_out(10);
+s_R_WE(11) <= WrEn and s_Decoder_out(11);
+s_R_WE(12) <= WrEn and s_Decoder_out(12);
+s_R_WE(13) <= WrEn and s_Decoder_out(13);
+s_R_WE(14) <= WrEn and s_Decoder_out(14);
+s_R_WE(15) <= WrEn and s_Decoder_out(15);
+s_R_WE(16) <= WrEn and s_Decoder_out(16);
+s_R_WE(17) <= WrEn and s_Decoder_out(17);
+s_R_WE(18) <= WrEn and s_Decoder_out(18);
+s_R_WE(19) <= WrEn and s_Decoder_out(19);
+s_R_WE(20) <= WrEn and s_Decoder_out(20);
+s_R_WE(21) <= WrEn and s_Decoder_out(21);
+s_R_WE(22) <= WrEn and s_Decoder_out(22);
+s_R_WE(23) <= WrEn and s_Decoder_out(23);
+s_R_WE(24) <= WrEn and s_Decoder_out(24);
+s_R_WE(25) <= WrEn and s_Decoder_out(25);
+s_R_WE(26) <= WrEn and s_Decoder_out(26);
+s_R_WE(27) <= WrEn and s_Decoder_out(27);
+s_R_WE(28) <= WrEn and s_Decoder_out(28);
+s_R_WE(29) <= WrEn and s_Decoder_out(29);
+s_R_WE(30) <= WrEn and s_Decoder_out(30);
+s_R_WE(31) <= WrEn and s_Decoder_out(31);
 
 
 --Register port maps
 
 -- R0 is always zero
-R0: Register_comp port map (clk => clk, 
-									 DataIN => Din,
-									 DataOUT => "00000000000000000000000000000000",
-									 WE => s_R_WE(0),
-									 rst => rst);
+--R0: Register_comp port map (clk => clk, 
+--									 DataIN => Din,
+--									 DataOUT => zero_constant,
+--									 WE => s_R_WE(0),
+--									 rst => rst);
 
 -- all the rest
-Register_gen: for k in 1 to 31 generate
+Register_gen: for k in 0 to 31 generate
 
 R: Register_comp port map (clk => clk,
 									DataIN => Din,
@@ -211,7 +257,7 @@ end generate Comparator_gen;
 
 MUX32_gen: for n in 0 to 1 generate
 
-Mult32: MUX32 port map (R0  => "00000000000000000000000000000000",
+Mult32: MUX32 port map (R0  => s_R_out(0),
 								R1  => s_R_out(1),
 								R2  => s_R_out(2),
 								R3  => s_R_out(3),
@@ -252,11 +298,15 @@ end generate MUX32_gen;
 
 MUX2_gen: for j in 0 to 1 generate
 
-Mult2: MUX2 port map (In0 => s_input_rArray(j),
-							 In1 => Awr,
-							 SEL => s_Comparator_out(j) and WrEn);
+Mult2: MUX2 port map (In0 => s_mux32_out(j),
+							 In1 => Din,
+							 Mux_out => s_mux2_out(j),
+							 SEL => s_mux2_select(j));
 
 end generate MUX2_gen;
+
+Dout1 <= s_mux2_out(0);
+Dout2 <= s_mux2_out(1);
 
 
 end Behavioral;
